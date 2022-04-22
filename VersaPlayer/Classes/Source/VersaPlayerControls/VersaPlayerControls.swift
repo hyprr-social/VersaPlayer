@@ -127,8 +127,11 @@ open class VersaPlayerControls: View {
     open func timeDidChange(toTime time: CMTime) {
         currentTimeLabel?.update(toTime: time.seconds)
         totalTimeLabel?.update(toTime: handler.player.endTime().seconds)
-        setSeekbarSlider(start: handler.player.startTime().seconds, end: handler.player.endTime().seconds, at: time.seconds)
-        
+
+        if !handler.isSeeking {
+            setSeekbarSlider(start: handler.player.startTime().seconds, end: handler.player.endTime().seconds, at: time.seconds)
+        }
+
         if !(handler.isSeeking || handler.isRewinding || handler.isForwarding) {
             behaviour.update(with: time.seconds)
         }
@@ -325,6 +328,7 @@ open class VersaPlayerControls: View {
         if wasPlayingBeforeSeeking {
             handler.play()
         }
+        behaviour.show()
     }
     
     /// Start Seeking
